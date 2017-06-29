@@ -1,0 +1,17 @@
+hash: 0ec32a78e1b33faed95d9519b93dfe5b3331778a12cba7407bf3800516ad820c
+updated: 2017-06-29T21:14:31.744090998+08:00
+imports:
+- name: github.com/BurntSushi/toml
+  version: b26d9c308763d68093482582cea63d69be07a0f0
+- name: github.com/judwhite/go-svc
+  version: 63c12402f579f0bdf022653c821a1aa5d7544f01
+  subpackages:
+  - svc
+- name: github.com/mreiferson/go-options
+  version: 77551d20752b54535462404ad9d877ebdb26e53d
+- name: golang.org/x/sys
+  version: 90796e5a05ce440b41c768bd9af257005e470461
+  subpackages:
+  - windows
+  - windows/svc
+testImports: []

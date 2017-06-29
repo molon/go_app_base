@@ -1,0 +1,9 @@
+package: github.com/molon/go_app_base
+import:
+- package: github.com/BurntSushi/toml
+  version: v0.3.0
+- package: github.com/judwhite/go-svc
+  version: v1.0.0
+  subpackages:
+  - svc
+- package: github.com/mreiferson/go-options
