@@ -1,19 +1,30 @@
 package connector
 
 import (
-	"github.com/molon/go_app_base/internal/lg"
+	"github.com/molon/go_app_base/internal/logger"
 )
 
-type Logger lg.Logger
+// Debugf logs a debug statement
+func (a *Connector) Debugf(format string, v ...interface{}) {
+	a.logger.Logf(logger.DEBUG, format, v...)
+}
 
-const (
-	LOG_DEBUG = lg.DEBUG
-	LOG_INFO  = lg.INFO
-	LOG_WARN  = lg.WARN
-	LOG_ERROR = lg.ERROR
-	LOG_FATAL = lg.FATAL
-)
+// Infof logs a info statement
+func (a *Connector) Infof(format string, v ...interface{}) {
+	a.logger.Logf(logger.INFO, format, v...)
+}
 
-func (n *Connector) logf(level lg.LogLevel, f string, args ...interface{}) {
-	lg.Logf(n.opts.Logger, n.opts.logLevel, level, f, args...)
+// Warnf logs a warn statement
+func (a *Connector) Warnf(format string, v ...interface{}) {
+	a.logger.Logf(logger.WARN, format, v...)
+}
+
+// Errorf logs a error statement
+func (a *Connector) Errorf(format string, v ...interface{}) {
+	a.logger.Logf(logger.ERROR, format, v...)
+}
+
+// Fatalf logs a fatal statement
+func (a *Connector) Fatalf(format string, v ...interface{}) {
+	a.logger.Logf(logger.FATAL, format, v...)
 }

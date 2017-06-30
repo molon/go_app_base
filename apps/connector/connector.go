@@ -13,25 +13,25 @@ import (
 	options "github.com/mreiferson/go-options"
 
 	app "github.com/molon/go_app_base/connector"
+	"github.com/molon/go_app_base/internal/logger"
 	"github.com/molon/go_app_base/internal/version"
 )
-
-func appFlagSet(opts *app.Options) *flag.FlagSet {
-	flagSet := flag.NewFlagSet("connector", flag.ExitOnError)
-
-	flagSet.String("config", "", "path to config file")
-	flagSet.Bool("version", false, "print version string")
-
-	flagSet.String("log-level", "info", "set log verbosity: debug, info, warn, error, or fatal")
-	flagSet.String("log-prefix", "[connector] ", "log message prefix")
-
-	return flagSet
-}
 
 type config map[string]interface{}
 
 type program struct {
 	app *app.Connector
+}
+
+func appFlagSet(opts *app.Options) *flag.FlagSet {
+	flagSet := flag.NewFlagSet(app.AppName, flag.ExitOnError)
+
+	flagSet.String("config", "", "path to config file")
+	flagSet.Bool("version", false, "print version string")
+
+	flagSet.String("log-level", "info", "set log verbosity: debug, info, warn, error, or fatal")
+
+	return flagSet
 }
 
 func main() {
@@ -56,7 +56,7 @@ func (p *program) Start() error {
 	flagSet.Parse(os.Args[1:])
 
 	if flagSet.Lookup("version").Value.(flag.Getter).Get().(bool) {
-		fmt.Println(version.String("connector"))
+		fmt.Println(version.String(app.AppName))
 		os.Exit(0)
 	}
 
@@ -70,10 +70,18 @@ func (p *program) Start() error {
 	}
 
 	options.Resolve(opts, flagSet, cfg)
-	daemon := app.New(opts)
 
+	logLevel, err := logger.ParseLogLevel(opts.LogLevel)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	logger := logger.NewStdLogger(true, true, true, logLevel)
+
+	daemon := app.New(opts, logger)
 	daemon.Main()
 	p.app = daemon
+
 	return nil
 }
 

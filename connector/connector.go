@@ -1,40 +1,45 @@
 package connector
 
 import (
-	"log"
-	"os"
 	"sync"
 
+	"github.com/molon/go_app_base/internal/logger"
 	"github.com/molon/go_app_base/internal/util"
 	"github.com/molon/go_app_base/internal/version"
 )
 
+const AppName = "ixora_connector"
+
 type Connector struct {
 	sync.RWMutex
+	logger    *logger.Logger
 	waitGroup util.WaitGroupWrapper
 	opts      *Options
 }
 
-func New(opts *Options) *Connector {
-	if opts.Logger == nil {
-		opts.Logger = log.New(os.Stderr, opts.LogPrefix, log.Ldate|log.Ltime|log.Lmicroseconds)
+func New(opts *Options, logger *logger.Logger) *Connector {
+	return &Connector{
+		logger: logger,
+		opts:   opts,
 	}
-	n := &Connector{
-		opts: opts,
-	}
-
-	n.logf(LOG_INFO, version.String("connector"))
-	return n
 }
 
-func (l *Connector) Main() {
+func (c *Connector) Main() {
+	c.Infof("Starting %s", version.String(AppName))
+
 	//TODO:需要将一些本身阻塞的玩意丢到waitGroup里
-	// l.waitGroup.Wrap(func() {
+	// c.waitGroup.Wrap(func() {
 	// 	http_api.Serve(httpListener, httpServer, "HTTP", l.logf)
 	// })
+
+	c.Infof("Server is ready")
 }
 
-func (l *Connector) Exit() {
+func (c *Connector) Exit() {
+	c.Infof("Server is exiting")
+
 	//TODO:需要再这里去做清理操作
-	l.waitGroup.Wait()
+	c.waitGroup.Wait()
+
+	c.Infof("Server has exited")
 }
