@@ -31,8 +31,6 @@ func (c *Connector) Main() {
 	// c.waitGroup.Wrap(func() {
 	// 	http_api.Serve(httpListener, httpServer, "HTTP", l.logf)
 	// })
-
-	c.Infof("Server is ready")
 }
 
 func (c *Connector) Exit() {

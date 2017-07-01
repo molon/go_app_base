@@ -34,6 +34,21 @@ func appFlagSet(opts *app.Options) *flag.FlagSet {
 	return flagSet
 }
 
+func newStdLogger(opts *app.Options) (*logger.Logger, error) {
+	logLevel, err := logger.ParseLogLevel(opts.LogLevel)
+	if err != nil {
+		return nil, err
+	}
+	colors := true
+	// Check to see if stderr is being redirected and if so turn off color
+	// Also turn off colors if we're running on Windows where os.Stderr.Stat() returns an invalid handle-error
+	stat, err := os.Stderr.Stat()
+	if err != nil || (stat.Mode()&os.ModeCharDevice) == 0 {
+		colors = false
+	}
+	return logger.NewStdLogger(true, colors, true, logLevel), nil
+}
+
 func main() {
 	prg := &program{}
 	if err := svc.Run(prg, syscall.SIGINT, syscall.SIGTERM); err != nil {
@@ -71,12 +86,11 @@ func (p *program) Start() error {
 
 	options.Resolve(opts, flagSet, cfg)
 
-	logLevel, err := logger.ParseLogLevel(opts.LogLevel)
+	logger, err := newStdLogger(opts)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	logger := logger.NewStdLogger(true, true, true, logLevel)
 
 	daemon := app.New(opts, logger)
 	daemon.Main()
