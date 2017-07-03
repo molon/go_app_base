@@ -24,7 +24,7 @@ type program struct {
 }
 
 func appFlagSet(opts *app.Options) *flag.FlagSet {
-	flagSet := flag.NewFlagSet(app.AppName, flag.ExitOnError)
+	flagSet := flag.NewFlagSet(app.APP_NAME, flag.ExitOnError)
 
 	flagSet.String("config", "", "path to config file")
 	flagSet.Bool("version", false, "print version string")
@@ -71,7 +71,7 @@ func (p *program) Start() error {
 	flagSet.Parse(os.Args[1:])
 
 	if flagSet.Lookup("version").Value.(flag.Getter).Get().(bool) {
-		fmt.Println(version.String(app.AppName))
+		fmt.Println(version.String(app.APP_NAME))
 		os.Exit(0)
 	}
 

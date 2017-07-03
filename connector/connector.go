@@ -8,7 +8,7 @@ import (
 	"github.com/molon/go_app_base/internal/version"
 )
 
-const AppName = "ixora_connector"
+const APP_NAME = "ixora_connector"
 
 type Connector struct {
 	sync.RWMutex
@@ -25,7 +25,7 @@ func New(opts *Options, logger *logger.Logger) *Connector {
 }
 
 func (c *Connector) Main() {
-	c.Infof("Starting %s", version.String(AppName))
+	c.Infof("Starting %s", version.String(APP_NAME))
 
 	//TODO:需要将一些本身阻塞的玩意丢到waitGroup里
 	// c.waitGroup.Wrap(func() {
