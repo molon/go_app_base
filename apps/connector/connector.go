@@ -29,7 +29,7 @@ func appFlagSet(opts *app.Options) *flag.FlagSet {
 	flagSet.String("config", "", "path to config file")
 	flagSet.Bool("version", false, "print version string")
 
-	flagSet.String("log-level", "info", "set log verbosity: debug, info, warn, error, or fatal")
+	flagSet.String("log-level", opts.LogLevel, "set log verbosity: debug, info, warn, error, or fatal")
 
 	return flagSet
 }
